@@ -1,26 +1,26 @@
-class Airport {
-  static get DEFAULT_CAPACITY() {
-    return 10;
+'use strict';
+
+class Airport{
+  constructor(weather) {
+    this._weather = typeof weather !== 'undefined' ? weather : new Weather();
+    this._hangar = []
   }
-  constructor(capacity = Airport.DEFAULT_CAPACITY) {
-    this.planes = [];
-    this.capacity = capacity
+  planes() {
+    return this._hangar;
   }
-  land(plane) {
-    if (this.planes.length === this.capacity) {
-      throw new Error("This airport is full");
+  clearForLanding(plane) {
+    if(this._weather.isStormy()) {
+      throw new Error('cannot land during storm');
     }
-    if (this.is_stormy() === true) {
-      throw new Error("Too stormy to land right now");
+    this._hangar.push(plane);
+  };
+  clearForTakeOff(plane) {
+    if(this._weather.isStormy()) {
+      throw new Error('cannot takeoff during storm');
     }
-    this.planes.push(plane);
+    this._hangar = [];
   }
-  take_off(plane) {
-    var num = this.planes.indexOf("planes");
-    return this.planes.splice(num)
+  isStormy() {
+    return false;
   }
-  is_stormy() {
-    var weather = Math.random();
-    return (weather > 0.8);
-  }
-}
+};
